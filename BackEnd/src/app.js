@@ -2,6 +2,8 @@ const express = require('express');
 const aiRoutes = require('./routes/ai.routes');
 const app =express();
 
+app.use(express.json());  //for req.body.prompt to make json data readable
+
 app.get('/', (req,res) => {
     res.send("heloo! World");
 });
