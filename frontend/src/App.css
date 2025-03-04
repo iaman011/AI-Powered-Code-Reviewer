@@ -1,0 +1,37 @@
+*{
+  margin: 0%;
+  padding: 0%;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root{
+  height:100%;
+  width:100%;
+}
+
+main{
+  height:100%;
+  width:100%;
+  padding:1.5rem;
+  display: flex;
+  gap: 1rem; /*gap between the partition of left and right*/
+}
+
+main .left,
+main .right{
+  height:100%;
+  flex-basis: 50%;  /*to divide the left and right in two equal parts*/
+  border-radius: 0.7rem;
+}
+
+main .left{
+  background-color: black;
+
+}
+
+main .right{
+  background-color: #343434;
+  
+}
