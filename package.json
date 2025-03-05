@@ -1,5 +1,10 @@
 {
   "dependencies": {
-    "prismjs": "^1.29.0"
+    "axios": "^1.8.1",
+    "cors": "^2.8.5",
+    "prismjs": "^1.29.0",
+    "react-markdown": "^10.0.1",
+    "react-simple-code-editor": "^0.14.1",
+    "rehype-highlight": "^7.0.2"
   }
 }

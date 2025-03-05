@@ -1,6 +1,10 @@
 const express = require('express');
 const aiRoutes = require('./routes/ai.routes');
+const cors = require('cors');  //to connect backend to frontend
+
 const app =express();
+
+app.use(cors());
 
 app.use(express.json());  //for req.body.prompt to make json data readable
 
