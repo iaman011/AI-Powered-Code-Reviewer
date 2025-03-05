@@ -11,7 +11,10 @@ import './App.css'
 function App () {
 
   const[count, setCount]= useState(0);
-  const[code, setCode] = useState(``);
+  const[code, setCode] = useState(`
+     leetcode solution 1109
+    }
+    `)
 
   const [review, setReview] = useState(``);
 
