@@ -49,7 +49,7 @@ async function reviewCode() {
                 
                 borderRadius: "5px",
                 height: "100%",
-                width: "100%"
+                width: "100%",
               }}
             />
         </div>
