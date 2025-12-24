@@ -24,7 +24,15 @@ function App () {
   // backend pe jo hmara server hai usme jo A.I. hai wo uss code ko dekhega aur review krke dega
 async function reviewCode() {
   // axios.post('http://localhost:3000/ai/get-review', { code})  ye code hame response la ke dega so we store it in response
-  const response = await axios.post('https://ai-powered-code-reviewer-i52s.onrender.com/ai/get-review', { code})
+  const response = await fetch(
+  "https://ai-powered-code-reviewer-blue.vercel.app/ai/get-review",
+  {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ code: userCode })
+  }
+);
+
   // const response = await axios.post('http://localhost:3000/ai/get-review', { code})
 
   // console.log(response.data);
