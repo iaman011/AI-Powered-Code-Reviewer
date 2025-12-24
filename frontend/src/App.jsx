@@ -24,7 +24,8 @@ function App () {
   // backend pe jo hmara server hai usme jo A.I. hai wo uss code ko dekhega aur review krke dega
 async function reviewCode() {
   // axios.post('http://localhost:3000/ai/get-review', { code})  ye code hame response la ke dega so we store it in response
-  const response = await axios.post('https://code-review-ai.onrender.com/ai/get-review', { code})
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://code-review-ai.onrender.com';
+  const response = await axios.post(`${apiBaseUrl}/ai/get-review`, { code})
 
   // const response = await axios.post('http://localhost:3000/ai/get-review', { code})
 
