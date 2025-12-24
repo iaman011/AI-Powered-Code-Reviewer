@@ -1,18 +1,30 @@
 const express = require('express');
 const aiRoutes = require('./routes/ai.routes');
-const cors = require('cors');  //to connect backend to frontend
+const cors = require('cors');
 
-const app =express();
+const app = express();
 
-app.use(cors());
+/**
+ * CORS configuration for Vercel frontend
+ */
+app.use(cors({
+  origin: "https://ai-powered-code-reviewer-git-main-iaman011s-projects.vercel.app",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  credentials: true
+}));
 
-app.use(express.json());  //for req.body.prompt to make json data readable
+// Handle preflight (OPTIONS) requests
+app.options('*', cors());
 
-app.get('/', (req,res) => {
-    res.send("heloo! World");
+app.use(express.json()); // to read JSON body
+
+// Health check route
+app.get('/', (req, res) => {
+  res.send("Backend is live 🚀");
 });
 
-// load the routes for aiRoutes ki agar koi bhi route /ai se shuru ho rha hai toh usse aiRoutes pe bhej do
+// Routes
+// Any route starting with /ai will go to aiRoutes
 app.use('/ai', aiRoutes);
 
 module.exports = app;
