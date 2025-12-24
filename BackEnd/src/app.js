@@ -5,10 +5,21 @@ const cors = require('cors');
 const app = express();
 
 /**
- * CORS configuration for Vercel frontend
+ * CORS configuration: allow production frontend from ENV and localhost in development
  */
+const FRONTEND_URL = process.env.FRONTEND_URL || "https://ai-powered-code-reviewer-git-main-iaman011s-projects.vercel.app";
+const allowedOrigins = [FRONTEND_URL];
+if (process.env.NODE_ENV !== 'production') {
+  allowedOrigins.push('http://localhost:5173', 'http://localhost:3000');
+}
+
 app.use(cors({
-  origin: "https://ai-powered-code-reviewer-git-main-iaman011s-projects.vercel.app",
+  origin: (origin, callback) => {
+    // allow non-browser requests like curl/postman (no origin)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1) return callback(null, true);
+    return callback(new Error('CORS policy: This origin is not allowed'));
+  },
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   credentials: true
 }));
