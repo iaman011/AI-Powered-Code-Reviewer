@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import "prismjs/themes/prism-tomorrow.css";
+import "prismjs/themes/prism-tomorrow.css"; // Prism theme
 import Editor from 'react-simple-code-editor';
-import prism from "prismjs";
+import Prism from "prismjs";
+import "prismjs/components/prism-javascript"; // load JS syntax
+import "prismjs/components/prism-python";     // load Python syntax (optional)
+import "prismjs/components/prism-css";        // load CSS syntax (optional)
 import Markdown from 'react-markdown';
 import rehypeHighlight from "rehype-highlight";
-import "highlight.js/styles/github-dark.css";
+import "highlight.js/styles/github-dark.css"; // Markdown highlight
 import axios from 'axios';
 import './App.css';
 
@@ -13,12 +16,11 @@ function App() {
   const [review, setReview] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Highlight code when component mounts or code changes
-  useEffect(() => {
-    prism.highlightAll();
-  }, [code]);
+  // Prism re-highlighting whenever code changes
+  const highlightCode = (code) => {
+    return Prism.highlight(code, Prism.languages.javascript, 'javascript');
+  };
 
-  // Function to send code to backend and get review
   const reviewCode = async () => {
     if (!code.trim()) {
       alert('Please enter some code for review');
@@ -29,13 +31,11 @@ function App() {
     setReview('');
 
     try {
-      // Use environment variable for API base URL
       const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
       const response = await axios.post(`${apiBaseUrl}/ai/get-review`, { code }, {
         headers: { 'Content-Type': 'application/json' }
       });
 
-      // Set review text from response
       setReview(response.data.review || 'No review returned');
     } catch (err) {
       console.error('Error fetching review:', err);
@@ -46,36 +46,46 @@ function App() {
   };
 
   return (
-    <main>
-      <div className="left">
-        <div className="code">
+    <main style={{ display: 'flex', height: '100vh', backgroundColor: '#000', color: '#fff', padding: '20px', boxSizing: 'border-box' }}>
+      <div className="left" style={{ flex: 1, marginRight: '10px', display: 'flex', flexDirection: 'column' }}>
+        <div className="code" style={{ flex: 1, marginBottom: '10px' }}>
           <Editor
             placeholder="Drop your code or query here for review"
             value={code}
             onValueChange={setCode}
-            highlight={code => prism.highlight(code, prism.languages.javascript, "javascript")}
+            highlight={highlightCode} // Prism highlighting enabled
             padding={10}
             style={{
-              fontFamily: '"Fira code", "Fira Mono", monospace',
+              fontFamily: '"Fira Code", monospace',
               fontSize: 16,
               borderRadius: "5px",
               height: "100%",
               width: "100%",
-              backgroundColor: "#2d2d2d",
+              backgroundColor: "#000",
               color: "#f8f8f2",
+              border: "1px solid #333",
+              outline: "none"
             }}
           />
         </div>
         <button
           onClick={reviewCode}
           disabled={loading}
-          className="review-button"
+          style={{
+            padding: "10px",
+            fontSize: "16px",
+            borderRadius: "5px",
+            backgroundColor: "#1a1a1a",
+            color: "#fff",
+            border: "none",
+            cursor: "pointer"
+          }}
         >
           {loading ? "Reviewing..." : "Review"}
         </button>
       </div>
 
-      <div className="right">
+      <div className="right" style={{ flex: 1, marginLeft: '10px', overflowY: 'auto', padding: '10px', backgroundColor: "#111", borderRadius: "5px" }}>
         <Markdown rehypePlugins={[rehypeHighlight]}>
           {review}
         </Markdown>
