@@ -4,9 +4,7 @@ const cors = require('cors');
 
 const app = express();
 
-/**
- * CORS configuration: allow production frontend from ENV and localhost in development
- */
+// Allowed origins
 const FRONTEND_URL = process.env.FRONTEND_URL || "https://ai-powered-code-reviewer-blue.vercel.app";
 const allowedOrigins = [FRONTEND_URL];
 if (process.env.NODE_ENV !== 'production') {
@@ -15,30 +13,28 @@ if (process.env.NODE_ENV !== 'production') {
 
 console.log('CORS allowed origins:', allowedOrigins);
 
+// CORS middleware
 app.use(cors({
   origin: (origin, callback) => {
-    // allow non-browser requests like curl/postman (no origin)
     if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) !== -1) return callback(null, true);
-    console.log('CORS rejected origin:', origin);
-    return callback(new Error('CORS policy: This origin is not allowed'));
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    console.warn('CORS rejected origin:', origin);
+    return callback(null, false);
   },
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   credentials: true
 }));
 
-// Handle preflight (OPTIONS) requests
-app.options('*', cors());
+app.options('*', cors()); // Preflight
 
-app.use(express.json()); // to read JSON body
+app.use(express.json()); // JSON body parsing
 
-// Health check route
-app.get('/', (req, res) => {
-  res.send("Backend is live 🚀");
-});
+// Health check
+app.get('/', (req, res) => res.send("Backend is live 🚀"));
 
-// Routes
-// Any route starting with /ai will go to aiRoutes
+// AI Routes
 app.use('/ai', aiRoutes);
 
-module.exports = app;
+// Listen on port
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Backend running on port ${PORT}`));
